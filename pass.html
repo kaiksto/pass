@@ -3,29 +3,29 @@
 <head>
 	<style>
 		html, body {
-		 background: #fff;
+			background: #fff;
 		}
 		input {
-     padding: 0px;
-     margin: 0px;
-     width: 160px;
-		 border: none;
-		 background: #ddd;
-		 color: #000;
+			padding: 0px;
+			margin: 0px;
+			width: 160px;
+			border: none;
+			background: #ddd;
+			color: #000;
 		}
 		input:focus {
-		 background: #000;
-		 color: #fff;
+			background: #000;
+			color: #fff;
 		}
-		#kolor, #f, #desc {
-		 display: block;
-		 width: 160px;
-		 /* margin: auto; */
+		#color, #f, #desc {
+			display: block;
+			width: 160px;
+			/* margin: auto; */
 		}
-		#kolor div {
-     float: left;
-     height: 20px;
-     width: 40px;
+		#color div {
+			float: left;
+			height: 20px;
+			width: 40px;
 		}
 	</style>
 	<script language="JavaScript">
@@ -36,6 +36,9 @@
 			 * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
 			 * Distributed under the BSD License
 			 * See  for details.
+			 *
+			 * With slightly modified output characters table, for oryginal go to:
+			 * http://public.hronopik.de/passwd2.html?lang=en
 			 */
 
 			var b64pad  = "";
@@ -45,136 +48,135 @@
 
 			function core_sha1(x, len)
 			{
-			  x[len >> 5] |= 0x80 << (24 - len % 32);
-			  x[((len + 64 >> 9) << 4) + 15] = len;
+				x[len >> 5] |= 0x80 << (24 - len % 32);
+				x[((len + 64 >> 9) << 4) + 15] = len;
 
-			  var w = Array(80);
-			  var a =  1732584193;
-			  var b = -271733879;
-			  var c = -1732584194;
-			  var d =  271733878;
-			  var e = -1009589776;
+				var w = Array(80);
+				var a =  1732584193;
+				var b = -271733879;
+				var c = -1732584194;
+				var d =  271733878;
+				var e = -1009589776;
 
-			  for(var i = 0; i < x.length; i += 16)
-			  {
-			    var olda = a;
-			    var oldb = b;
-			    var oldc = c;
-			    var oldd = d;
-			    var olde = e;
+				for(var i = 0; i < x.length; i += 16)
+				{
+					var olda = a;
+					var oldb = b;
+					var oldc = c;
+					var oldd = d;
+					var olde = e;
 
-			    for(var j = 0; j < 80; j++)
-			    {
-			      if(j < 16) w[j] = x[i + j];
-			      else w[j] = rol(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1);
-			      var t = safe_add(safe_add(rol(a, 5), sha1_ft(j, b, c, d)),
-			                       safe_add(safe_add(e, w[j]), sha1_kt(j)));
-			      e = d;
-			      d = c;
-			      c = rol(b, 30);
-			      b = a;
-			      a = t;
-			    }
+					for(var j = 0; j < 80; j++)
+					{
+						if(j < 16) w[j] = x[i + j];
+						else w[j] = rol(w[j-3] ^ w[j-8] ^ w[j-14] ^ w[j-16], 1);
+						var t = safe_add(safe_add(rol(a, 5), sha1_ft(j, b, c, d)), safe_add(safe_add(e, w[j]), sha1_kt(j)));
+						e = d;
+						d = c;
+						c = rol(b, 30);
+						b = a;
+						a = t;
+					}
 
-			    a = safe_add(a, olda);
-			    b = safe_add(b, oldb);
-			    c = safe_add(c, oldc);
-			    d = safe_add(d, oldd);
-			    e = safe_add(e, olde);
-			  }
-			  return Array(a, b, c, d, e);
+					a = safe_add(a, olda);
+					b = safe_add(b, oldb);
+					c = safe_add(c, oldc);
+					d = safe_add(d, oldd);
+					e = safe_add(e, olde);
+				}
+				return Array(a, b, c, d, e);
 
 			}
 
 			function sha1_ft(t, b, c, d)
 			{
-			  if(t < 20) return (b & c) | ((~b) & d);
-			  if(t < 40) return b ^ c ^ d;
-			  if(t < 60) return (b & c) | (b & d) | (c & d);
-			  return b ^ c ^ d;
+				if(t < 20) return (b & c) | ((~b) & d);
+				if(t < 40) return b ^ c ^ d;
+				if(t < 60) return (b & c) | (b & d) | (c & d);
+				return b ^ c ^ d;
 			}
 
 			function sha1_kt(t)
 			{
-			  return (t < 20) ?  1518500249 : (t < 40) ?  1859775393 :
-			         (t < 60) ? -1894007588 : -899497514;
+				return (t < 20) ?  1518500249 : (t < 40) ?  1859775393 : (t < 60) ? -1894007588 : -899497514;
 			}
 
 			function safe_add(x, y)
 			{
-			  var lsw = (x & 0xFFFF) + (y & 0xFFFF);
-			  var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-			  return (msw << 16) | (lsw & 0xFFFF);
+				var lsw = (x & 0xFFFF) + (y & 0xFFFF);
+				var msw = (x >> 16) + (y >> 16) + (lsw >> 16);
+				return (msw << 16) | (lsw & 0xFFFF);
 			}
 
 			function rol(num, cnt)
 			{
-			  return (num << cnt) | (num >>> (32 - cnt));
+				return (num << cnt) | (num >>> (32 - cnt));
 			}
 
 			function str2binb(str)
 			{
-			  var bin = Array();
-			  var mask = (1 << chrsz) - 1;
-			  for(var i = 0; i < str.length * chrsz; i += chrsz)
-			    bin[i>>5] |= (str.charCodeAt(i / chrsz) & mask) << (24 - i%32);
-			  return bin;
+				var bin = Array();
+				var mask = (1 << chrsz) - 1;
+				for(var i = 0; i < str.length * chrsz; i += chrsz)
+					bin[i>>5] |= (str.charCodeAt(i / chrsz) & mask) << (24 - i%32);
+				return bin;
 			}
 
 			function binb2b64(binarray)
 			{
-			  var tab = "ABCDEFGHIJKLMNOPRSTUWYZabcdefghijklmnoprstuwyz0123456789+#!?@$&_";
-			  var str = "";
-			  for(var i = 0; i < binarray.length * 4; i += 3)
-			  {
-			    var triplet = (((binarray[i   >> 2] >> 8 * (3 -  i   %4)) & 0xFF) << 16)
-			                 | (((binarray[i+1 >> 2] >> 8 * (3 - (i+1)%4)) & 0xFF) << 8 )
-			                 |  ((binarray[i+2 >> 2] >> 8 * (3 - (i+2)%4)) & 0xFF);
-			    for(var j = 0; j < 4; j++)
-			    {
-			      if(i * 8 + j * 6 > binarray.length * 32) str += b64pad;
-			      else str += tab.charAt((triplet >> 6*(3-j)) & 0x3F);
-			    }
-			  }
-			  return str;
+				var tab = "ABCDEFGHIJKLMNOPRSTUWYZabcdefghijklmnoprstuwyz0123456789+#!?@$&_";
+				var str = "";
+				for(var i = 0; i < binarray.length * 4; i += 3)
+				{
+					var triplet = (((binarray[i >> 2] >> 8 * (3 - i %4)) & 0xFF) << 16) | (((binarray[i+1 >> 2] >> 8 * (3 - (i+1)%4)) & 0xFF) << 8 ) | ((binarray[i+2 >> 2] >> 8 * (3 - (i+2)%4)) & 0xFF);
+					for(var j = 0; j < 4; j++)
+					{
+						if(i * 8 + j * 6 > binarray.length * 32) str += b64pad;
+						else str += tab.charAt((triplet >> 6*(3-j)) & 0x3F);
+					}
+				}
+				return str;
 			}
-      function output(a)
-      {
-        var array = core_sha1(str2binb(a),a.length * chrsz);
-        for(var i=0;i<5;i++) if(array[i]<0)array[i]*=-1;
-        var text = array[0]*array[1]+array[2]*array[3]+array[4];
-        text = text+'ffffff'
-        var nowy = "";
-        for(var i=0;i<text.length;i++) {
-          var temp=text.charAt(i);
-          temp=parseInt(temp*16/10);
-          if(temp>9) {
-            if(temp == 10) temp="a";
-            if(temp == 11) temp="b";
-            if(temp == 12) temp="c";
-            if(temp == 13) temp="d";
-            if(temp == 14) temp="e";
-            if(temp == 15) temp="f";
-          }
-          nowy = nowy+""+temp;
-        }
-        text = "";
-        for (var i=2;i<3*4;i+=3) {
-          text = text+"<div style='background: #";
-          for (var j=0;j<3;j++) text = text+""+nowy.charAt(i-3+j+1);
-          text = text+";'></div>"
-        }
-        return text;
-      }
+
+			/* End of copyrighted part */
+
+			function feedback(a)
+			{
+				var array = core_sha1(str2binb(a),a.length * chrsz);
+				for(var i=0;i<5;i++) if(array[i]<0)array[i]*=-1;
+				var text = array[0]*array[1]+array[2]*array[3]+array[4];
+				text = text+'ffffff'
+				var new = "";
+				for(var i=0;i<text.length;i++) {
+					var temp=text.charAt(i);
+					temp=parseInt(temp*16/10);
+					if(temp>9) {
+						if(temp == 10) temp="a";
+						if(temp == 11) temp="b";
+						if(temp == 12) temp="c";
+						if(temp == 13) temp="d";
+						if(temp == 14) temp="e";
+						if(temp == 15) temp="f";
+					}
+					new = new+""+temp;
+				}
+				text = "";
+				for (var i=2;i<3*4;i+=3) {
+					text = text+"<div style='background: #";
+					for (var j=0;j<3;j++) text = text+""+new.charAt(i-3+j+1);
+					text = text+";'></div>"
+				}
+				return text;
+			}
 		</script>
 	</head>
 	<body>
 		<form name="f" id="f">
-		<input name="master" type="password" onKeyUp="document.getElementById('kolor').innerHTML = output(this.value);"/>
+		<input name="master" type="password" onKeyUp="document.getElementById('color').innerHTML = feedback(this.value);"/>
 		<input name="site"/>
 		<input name="password" style="position:absolute;top:-200px;" onFocus="this.value = b64_sha1(f.master.value+':'+ f.site.value).substr(0,10) + '1a';" />
-    <div id="kolor"></div>
-		<script language="JavaScript">document.f.master.focus();document.getElementById('kolor').innerHTML = output("");</script>
+		<div id="color"></div>
+		<script language="JavaScript">document.f.master.focus();document.getElementById('color').innerHTML = feedback("");</script>
 		</form>
 	</body>
 </html>
